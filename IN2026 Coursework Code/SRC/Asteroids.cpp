@@ -58,13 +58,16 @@ void Asteroids::Start()
 	Animation *asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile("asteroid1", 128, 8192, 128, 128, "asteroid1_fs.png");
 	Animation *spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile("spaceship", 128, 128, 128, 128, "spaceship_fs.png");
 
+	CreateStartScreenGUI();
+	
 	// Create a spaceship and add it to the world
-	mGameWorld->AddObject(CreateSpaceship());
+	//mGameWorld->AddObject(CreateSpaceship());
 	// Create some asteroids and add them to the world
-	CreateAsteroids(10);
+	//CreateAsteroids(10);
 
 	//Create the GUI
-	CreateGUI();
+	//CreateGUI();
+
 
 	// Add a player (watcher) to the game world
 	mGameWorld->AddListener(&mPlayer);
@@ -208,6 +211,40 @@ void Asteroids::CreateAsteroids(const uint num_asteroids)
 		asteroid->SetScale(0.2f);
 		mGameWorld->AddObject(asteroid);
 	}
+}
+
+/** Creates Start Screen **/
+void Asteroids::CreateStartScreenGUI()
+{
+	//Add a border around game display
+	mGameDisplay->GetContainer()->SetBorder(GLVector2i(10, 10));
+
+	//Creates a new GUILabel to start the game
+	mStartLabel = make_shared<GUILabel>("Start");
+	// Set the vertical alignment of the label to GUI_VALIGN_TOP
+	mStartLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_TOP);
+	// Add the GUILabel to the GUIComponent  
+	shared_ptr<GUIComponent> start_component
+		= static_pointer_cast<GUIComponent>(mStartLabel);
+	mGameDisplay->GetContainer()->AddComponent(start_component, GLVector2f(0.0f, 1.0f));
+
+	//Creates a new GUILabel for settings
+	mSettingsLabel = make_shared<GUILabel>("Settings");
+	//
+	mSettingsLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+	//
+	shared_ptr<GUIComponent> settings_component
+		= static_pointer_cast<GUIComponent>(mSettingsLabel);
+	mGameDisplay->GetContainer()->AddComponent(settings_component, GLVector2f(0.0f, 1.0f));
+
+	//Creates a new GUILabel for settings
+	mQuitLabel = make_shared<GUILabel>("Quit");
+	//
+	mQuitLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+	//
+	shared_ptr<GUIComponent> quit_component
+		= static_pointer_cast<GUIComponent>(mQuitLabel);
+	mGameDisplay->GetContainer()->AddComponent(quit_component, GLVector2f(0.0f, 1.0f));
 }
 
 void Asteroids::CreateGUI()

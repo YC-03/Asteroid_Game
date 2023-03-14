@@ -52,10 +52,19 @@ private:
 	shared_ptr<GUILabel> mScoreLabel;
 	shared_ptr<GUILabel> mLivesLabel;
 	shared_ptr<GUILabel> mGameOverLabel;
-
+	// Labels for start screen 
+	shared_ptr<GUILabel> mStartLabel;
+	shared_ptr<GUILabel> mSettingsLabel;
+	shared_ptr<GUILabel> mQuitLabel;
+	
 	uint mLevel;
 	uint mAsteroidCount;
 
+	//For start screen
+	void CreateStartScreenGUI();
+
+
+	//For Game (Not start Screen)
 	void ResetSpaceship();
 	shared_ptr<GameObject> CreateSpaceship();
 	void CreateGUI();
