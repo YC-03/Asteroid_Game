@@ -60,10 +60,6 @@ private:
 	uint mLevel;
 	uint mAsteroidCount;
 
-	//For start screen
-	void CreateStartScreenGUI();
-
-
 	//For Game (Not start Screen)
 	void ResetSpaceship();
 	shared_ptr<GameObject> CreateSpaceship();
@@ -74,6 +70,10 @@ private:
 	const static uint SHOW_GAME_OVER = 0;
 	const static uint START_NEXT_LEVEL = 1;
 	const static uint CREATE_NEW_PLAYER = 2;
+
+	//boolean to start game
+	bool mStartGame;
+
 
 	ScoreKeeper mScoreKeeper;
 	Player mPlayer;
