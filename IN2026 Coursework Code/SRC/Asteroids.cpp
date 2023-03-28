@@ -63,8 +63,9 @@ void Asteroids::Start()
 	
 	// Create a spaceship and add it to the world
 	//mGameWorld->AddObject(CreateSpaceship());
+
 	// Create some asteroids and add them to the world
-	//CreateAsteroids(10);
+	CreateAsteroids(5);
 
 	//Create the GUI
 	CreateGUI();
@@ -91,46 +92,46 @@ void Asteroids::Stop()
 
 void Asteroids::OnKeyPressed(uchar key, int x, int y)
 {
-	//if (!mStartGame) {
-	//	switch (key) 
-	//	{
-	//	case 'x':
-	//		// Create a spaceship and add it to the world
-	//		mGameWorld->AddObject(CreateSpaceship());
-	//		mStartGame = true;
-	//		mStartLabel->SetVisible(false);
-	//		break;
-	//	default:
-	//		break;
+	if (!mStartGame) {
+		switch (key) 
+		{
+		case 'x':
+			// Create a spaceship and add it to the world
+			mGameWorld->AddObject(CreateSpaceship());
+			mStartGame = true;
+			mStartLabel->SetVisible(false);
+			break;
+		default:
+			break;
 
-	//	}
-	//}
+		}
+	}
 
-	//switch (key)
-	//{
-	//case ' ':
-	//	mSpaceship->Shoot();
-	//	break;
-	//default:
-	//	break;
-	//}
-
-	
 	switch (key)
 	{
 	case ' ':
 		mSpaceship->Shoot();
 		break;
-	case 'x':
-		mStartLabel->SetVisible(false);
-		// Create a spaceship and add it to the world
-		mGameWorld->AddObject(CreateSpaceship());
-		// Create some asteroids and add them to the world
-		CreateAsteroids(10);
-		break;
 	default:
 		break;
 	}
+
+	
+	//switch (key)
+	//{
+	//case ' ':
+	//	mSpaceship->Shoot();
+	//	break;
+	//case 'x':
+	//	mStartLabel->SetVisible(false);
+	//	// Create a spaceship and add it to the world
+	//	mGameWorld->AddObject(CreateSpaceship());
+	//	// Create some asteroids and add them to the world
+	//	CreateAsteroids(10);
+	//	break;
+	//default:
+	//	break;
+	//}
 }
 
 void Asteroids::OnKeyReleased(uchar key, int x, int y) {}
@@ -325,6 +326,7 @@ void Asteroids::OnPlayerKilled(int lives_left)
 	else
 	{
 		SetTimer(500, SHOW_GAME_OVER);
+
 	}
 }
 
