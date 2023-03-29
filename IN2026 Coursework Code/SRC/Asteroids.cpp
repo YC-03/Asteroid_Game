@@ -11,6 +11,8 @@
 #include "BoundingSphere.h"
 #include "GUILabel.h"
 #include "Explosion.h"
+#include "PowerUp.h"
+#include "ScoreMultiplier.h"
 
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
 
@@ -20,7 +22,6 @@ Asteroids::Asteroids(int argc, char *argv[])
 {
 	mLevel = 0;
 	mAsteroidCount = 0;
-
 	mStartGame = false;
 }
 
@@ -66,6 +67,8 @@ void Asteroids::Start()
 
 	// Create some asteroids and add them to the world
 	CreateAsteroids(5);
+	CreatePowerUp(1);
+	CreateScoreMultiplier(1);
 
 	//Create the GUI
 	CreateGUI();
@@ -100,6 +103,7 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
 			mGameWorld->AddObject(CreateSpaceship());
 			mStartGame = true;
 			mStartLabel->SetVisible(false);
+			//CreatePowerUp();
 			break;
 		default:
 			break;
@@ -134,7 +138,10 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
 	//}
 }
 
-void Asteroids::OnKeyReleased(uchar key, int x, int y) {}
+void Asteroids::OnKeyReleased(uchar key, int x, int y)
+{
+	
+}
 
 void Asteroids::OnSpecialKeyPressed(int key, int x, int y)
 {
@@ -183,6 +190,34 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 			SetTimer(500, START_NEXT_LEVEL); 
 		}
 	}
+	if (object->GetType() == GameObjectType("PowerUp"))
+	{
+		// Increases Life by 1 once picked up
+		mPlayer.mLives++;
+
+		std::ostringstream msg_stream;
+		msg_stream << "Lives: " << mPlayer.mLives;
+		// Get the lives left message as a string
+		std::string lives_msg = msg_stream.str();
+		mLivesLabel->SetText(lives_msg);
+
+		SetTimer(90, CREATE_POWER_UP);
+		
+	}
+	if (object->GetType() == GameObjectType("ScoreMultiplier"))
+	{
+		mScoreKeeper.mScore = mScoreKeeper.mScore * 2;
+		
+
+		std::ostringstream msg_stream;
+		msg_stream << "Score: " << mScoreKeeper.mScore;
+		// Get the score message as a string
+		std::string score_msg = msg_stream.str();
+		mScoreLabel->SetText(score_msg);
+
+		SetTimer(150, CREATE_POWER_UP);
+
+	}
 }
 
 // PUBLIC INSTANCE METHODS IMPLEMENTING ITimerListener ////////////////////////
@@ -206,7 +241,14 @@ void Asteroids::OnTimer(int value)
 	{
 		mGameOverLabel->SetVisible(true);
 	}
-
+	if (value == CREATE_POWER_UP)
+	{
+		CreatePowerUp(1);
+	}
+	if (value == CREATE_SCORE_MULTIPLIER)
+	{
+		CreateScoreMultiplier(1);
+	}
 }
 
 // PROTECTED INSTANCE METHODS /////////////////////////////////////////////////
@@ -245,6 +287,21 @@ void Asteroids::CreateAsteroids(const uint num_asteroids)
 		asteroid->SetScale(0.2f);
 		mGameWorld->AddObject(asteroid);
 	}
+}
+void Asteroids::CreatePowerUp(const uint num_powerUp)
+{
+	mPowerUp = make_shared<PowerUp>();
+	mPowerUp->SetBoundingShape(make_shared<BoundingSphere>(mPowerUp->GetThisPtr(), 10.0f));
+	mGameWorld->AddObject(mPowerUp);
+
+}
+
+void Asteroids::CreateScoreMultiplier(const uint num_scoreUp)
+{
+	mScoreMultiplier = make_shared<ScoreMultiplier>();
+	mScoreMultiplier->SetBoundingShape(make_shared<BoundingSphere>(mScoreMultiplier->GetThisPtr(), 10.0f));
+	mGameWorld->AddObject(mScoreMultiplier);
+
 }
 
 void Asteroids::CreateGUI()

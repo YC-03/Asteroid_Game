@@ -37,10 +37,8 @@ public:
 			(*lit)->OnScoreChanged(mScore);
 		}
 	}
-
-private:
 	int mScore;
-
+private:
 	typedef std::list< shared_ptr<IScoreListener> > ScoreListenerList;
 
 	ScoreListenerList mListeners;

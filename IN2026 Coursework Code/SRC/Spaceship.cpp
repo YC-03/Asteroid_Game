@@ -89,7 +89,6 @@ void Spaceship::Shoot(void)
 	bullet->SetShape(mBulletShape);
 	// Add the new bullet to the game world
 	mWorld->AddObject(bullet);
-
 }
 
 bool Spaceship::CollisionTest(shared_ptr<GameObject> o)

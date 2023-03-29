@@ -13,6 +13,8 @@
 class GameObject;
 class Spaceship;
 class GUILabel;
+class PowerUp;
+class ScoreMultiplier;
 
 class Asteroids : public GameSession, public IKeyboardListener, public IGameWorldListener, public IScoreListener, public IPlayerListener
 {
@@ -55,6 +57,9 @@ private:
 	// Labels for start screen 
 	shared_ptr<GUILabel> mStartLabel;
 	shared_ptr<GUILabel> mRestartLabel;
+	// Power Up 
+	shared_ptr<PowerUp>mPowerUp;
+	shared_ptr<ScoreMultiplier>mScoreMultiplier;
 	
 	uint mLevel;
 	uint mAsteroidCount;
@@ -64,11 +69,17 @@ private:
 	shared_ptr<GameObject> CreateSpaceship();
 	void CreateGUI();
 	void CreateAsteroids(const uint num_asteroids);
+	// Adds extra life
+	void CreatePowerUp(const uint num_powerUp);
+	// Adds Score Multiplier
+	void CreateScoreMultiplier(const uint num_scoreUp);
 	shared_ptr<GameObject> CreateExplosion();
 	
 	const static uint SHOW_GAME_OVER = 0;
 	const static uint START_NEXT_LEVEL = 1;
 	const static uint CREATE_NEW_PLAYER = 2;
+	const static uint CREATE_POWER_UP = 3;
+	const static uint CREATE_SCORE_MULTIPLIER = 4;
 
 	//boolean to start game
 	bool mStartGame;
