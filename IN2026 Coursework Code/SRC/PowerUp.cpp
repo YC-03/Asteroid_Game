@@ -22,7 +22,7 @@ PowerUp::~PowerUp(void)
 
 void PowerUp::Render(void)
 {
-	glBegin(GL_LINE_LOOP);
+	glBegin(GL_TRIANGLES);
 	glScalef(3.0f, 3.0f, 3.0f);
 	glColor3f(2.0f, 0.5f, 1.0f);
 	glVertex3f(-3, -3, 0);

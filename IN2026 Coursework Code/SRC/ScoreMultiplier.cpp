@@ -22,13 +22,9 @@ ScoreMultiplier::~ScoreMultiplier(void)
 
 void ScoreMultiplier::Render(void)
 {
-	glBegin(GL_LINE_LOOP);
 	glScalef(3.0f, 3.0f, 3.0f);
 	glColor3f(2.0f, 0.5f, 1.0f);
-	glVertex3f(4, 4, 0);
-	glVertex3f(-4, 4, 0);
-	glVertex3f(4, -4, 0);
-	glVertex3f(-4, -4, 0);
+	glRectf(-1, -1, 1, 1);
 	glEnd();
 	glEnable(GL_LIGHTING);
 

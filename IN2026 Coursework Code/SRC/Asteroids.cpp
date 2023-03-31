@@ -192,6 +192,8 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 	}
 	if (object->GetType() == GameObjectType("PowerUp"))
 	{
+		// When Powerup is picked up user gets triple fire for a limited time
+		mSpaceship->ActivateTripleFire(2000);
 		// Increases Life by 1 once picked up
 		mPlayer.mLives++;
 
@@ -201,11 +203,13 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 		std::string lives_msg = msg_stream.str();
 		mLivesLabel->SetText(lives_msg);
 
-		SetTimer(90, CREATE_POWER_UP);
+		SetTimer(280, CREATE_POWER_UP);
 		
 	}
 	if (object->GetType() == GameObjectType("ScoreMultiplier"))
 	{
+		// When Powerup is picked up user gets triple fire for a limited time
+		mSpaceship->ActivateTripleFire(2000);
 		mScoreKeeper.mScore = mScoreKeeper.mScore * 2;
 		
 
@@ -215,7 +219,7 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 		std::string score_msg = msg_stream.str();
 		mScoreLabel->SetText(score_msg);
 
-		SetTimer(150, CREATE_POWER_UP);
+		SetTimer(300, CREATE_SCORE_MULTIPLIER);
 
 	}
 }
