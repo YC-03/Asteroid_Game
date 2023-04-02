@@ -13,6 +13,7 @@
 #include "Explosion.h"
 #include "PowerUp.h"
 #include "ScoreMultiplier.h"
+#include "DemoSpaceship.h"
 
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
 
@@ -64,6 +65,9 @@ void Asteroids::Start()
 	
 	// Create a spaceship and add it to the world
 	//mGameWorld->AddObject(CreateSpaceship());
+
+	//Create a demo spaceship and add it to the world
+
 
 	// Create some asteroids and add them to the world
 	CreateAsteroids(5);
@@ -275,6 +279,11 @@ shared_ptr<GameObject> Asteroids::CreateSpaceship()
 	return mSpaceship;
 
 }
+
+//shared_ptr<GameObject> Asteroids::CreateDemoSpaceship()
+//{
+
+//}
 
 void Asteroids::CreateAsteroids(const uint num_asteroids)
 {

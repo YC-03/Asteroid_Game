@@ -15,6 +15,7 @@ class Spaceship;
 class GUILabel;
 class PowerUp;
 class ScoreMultiplier;
+class DemoSpaceship;
 
 class Asteroids : public GameSession, public IKeyboardListener, public IGameWorldListener, public IScoreListener, public IPlayerListener
 {
@@ -49,6 +50,7 @@ public:
 	// Override the default implementation of ITimerListener ////////////////////
 	void OnTimer(int value);
 
+
 private:
 	shared_ptr<Spaceship> mSpaceship;
 	shared_ptr<GUILabel> mScoreLabel;
@@ -56,17 +58,20 @@ private:
 	shared_ptr<GUILabel> mGameOverLabel;
 	// Labels for start screen 
 	shared_ptr<GUILabel> mStartLabel;
-	shared_ptr<GUILabel> mRestartLabel;
 	// Power Up 
 	shared_ptr<PowerUp>mPowerUp;
 	shared_ptr<ScoreMultiplier>mScoreMultiplier;
-	
+	// Demo Spaceship
+	shared_ptr<DemoSpaceship>mDemoSpaceship;
 	uint mLevel;
 	uint mAsteroidCount;
 
 	//For Game (Not start Screen)
 	void ResetSpaceship();
+	// Creates controllable spaceship
 	shared_ptr<GameObject> CreateSpaceship();
+	// Creates demo spaceship
+	shared_ptr<GameObject> CreateDemoSpaceship();
 	void CreateGUI();
 	void CreateAsteroids(const uint num_asteroids);
 	// Adds extra life
@@ -80,6 +85,7 @@ private:
 	const static uint CREATE_NEW_PLAYER = 2;
 	const static uint CREATE_POWER_UP = 3;
 	const static uint CREATE_SCORE_MULTIPLIER = 4;
+	//const static unit DEMO_CONTROL = 5;
 
 	//boolean to start game
 	bool mStartGame;
