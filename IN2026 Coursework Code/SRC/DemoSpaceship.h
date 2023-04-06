@@ -1,5 +1,5 @@
-#ifndef __SPACESHIP_H__
-#define __SPACESHIP_H__
+#ifndef __DEMOSPACESHIP_H__
+#define __DEMOSPACESHIP_H__
 
 #include "GameUtil.h"
 #include "GameObject.h"

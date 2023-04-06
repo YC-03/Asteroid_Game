@@ -1,6 +1,6 @@
 #include "GameUtil.h"
 #include "GameWorld.h"
-#include "Bullet.h"
+#include "DemoBullet.h"
 #include "DemoSpaceship.h"
 #include "BoundingSphere.h"
 
@@ -102,7 +102,7 @@ void DemoSpaceship::Shoot(void)
 
 		// Construct a new bullet
 		shared_ptr<GameObject> demoBullet
-		(new Bullet(bullet_position, bullet_velocity, mAcceleration, mAngle, 0, 2000));
+		(new DemoBullet(bullet_position, bullet_velocity, mAcceleration, mAngle, 0, 2000));
 		demoBullet->SetBoundingShape(make_shared<BoundingSphere>(demoBullet->GetThisPtr(), 2.0f));
 		demoBullet->SetShape(mDemoBulletShape);
 		// Add the new bullet to the game world
@@ -132,17 +132,17 @@ void DemoSpaceship::AiTripleShot(void)
 
 	// Construct the three new bullets
 	shared_ptr<GameObject> demoBullet1
-	(new Bullet(bullet_position1, bullet_velocity1, mAcceleration, mAngle, 0, 2000));
+	(new DemoBullet(bullet_position1, bullet_velocity1, mAcceleration, mAngle, 0, 2000));
 	demoBullet1->SetBoundingShape(make_shared<BoundingSphere>(demoBullet1->GetThisPtr(), 2.0f));
 	demoBullet1->SetShape(mDemoBulletShape);
 
 	shared_ptr<GameObject> demoBullet2
-	(new Bullet(bullet_position2, bullet_velocity2, mAcceleration, mAngle, 0, 2000));
+	(new DemoBullet(bullet_position2, bullet_velocity2, mAcceleration, mAngle, 0, 2000));
 	demoBullet2->SetBoundingShape(make_shared<BoundingSphere>(demoBullet2->GetThisPtr(), 2.0f));
 	demoBullet2->SetShape(mDemoBulletShape);
 
 	shared_ptr<GameObject> demoBullet3
-	(new Bullet(bullet_position3, bullet_velocity3, mAcceleration, mAngle, 0, 2000));
+	(new DemoBullet(bullet_position3, bullet_velocity3, mAcceleration, mAngle, 0, 2000));
 	demoBullet3->SetBoundingShape(make_shared<BoundingSphere>(demoBullet3->GetThisPtr(), 2.0f));
 	demoBullet3->SetShape(mDemoBulletShape);
 

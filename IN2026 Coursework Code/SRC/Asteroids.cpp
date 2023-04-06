@@ -62,12 +62,10 @@ void Asteroids::Start()
 	Animation *asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile("asteroid1", 128, 8192, 128, 128, "asteroid1_fs.png");
 	Animation *spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile("spaceship", 128, 128, 128, 128, "spaceship_fs.png");
 
-	
-	// Create a spaceship and add it to the world
-	//mGameWorld->AddObject(CreateSpaceship());
 
 	//Create a demo spaceship and add it to the world
-
+	mGameWorld->AddObject(CreateDemoSpaceship());
+	SetTimer(700, DEMO_CONTROL);
 
 	// Create some asteroids and add them to the world
 	CreateAsteroids(5);
@@ -108,6 +106,10 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
 			mStartGame = true;
 			mStartLabel->SetVisible(false);
 			//CreatePowerUp();
+			mGameWorld->FlagForRemoval(mDemoSpaceship);
+			mLivesLabel->SetVisible(true);
+			mScoreKeeper.mScore = 0;
+			mLevel = 0;
 			break;
 		default:
 			break;
@@ -154,9 +156,9 @@ void Asteroids::OnSpecialKeyPressed(int key, int x, int y)
 	// If up arrow key is pressed start applying forward thrust
 	case GLUT_KEY_UP: mSpaceship->Thrust(10); break;
 	// If left arrow key is pressed start rotating anti-clockwise
-	case GLUT_KEY_LEFT: mSpaceship->Rotate(90); break;
+	case GLUT_KEY_LEFT: mSpaceship->Rotate(180); break;
 	// If right arrow key is pressed start rotating clockwise
-	case GLUT_KEY_RIGHT: mSpaceship->Rotate(-90); break;
+	case GLUT_KEY_RIGHT: mSpaceship->Rotate(-180); break;
 	// Default case - do nothing
 	default: break;
 	}
@@ -196,35 +198,57 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 	}
 	if (object->GetType() == GameObjectType("PowerUp"))
 	{
-		// When Powerup is picked up user gets triple fire for a limited time
-		mSpaceship->ActivateTripleFire(2000);
-		// Increases Life by 1 once picked up
-		mPlayer.mLives++;
+		if (!mStartGame)
+		{
+			mDemoSpaceship->AiActivateTripleFire(2000);
+		}
+		else {
+			// When Powerup is picked up user gets triple fire for a limited time
+			mSpaceship->ActivateTripleFire(2000);
+			// Increases Life by 1 once picked up
+			mPlayer.mLives++;
 
-		std::ostringstream msg_stream;
-		msg_stream << "Lives: " << mPlayer.mLives;
-		// Get the lives left message as a string
-		std::string lives_msg = msg_stream.str();
-		mLivesLabel->SetText(lives_msg);
+			std::ostringstream msg_stream;
+			msg_stream << "Lives: " << mPlayer.mLives;
+			// Get the lives left message as a string
+			std::string lives_msg = msg_stream.str();
+			mLivesLabel->SetText(lives_msg);
 
-		SetTimer(280, CREATE_POWER_UP);
+			SetTimer(280, CREATE_POWER_UP);
+		}
 		
 	}
 	if (object->GetType() == GameObjectType("ScoreMultiplier"))
 	{
-		// When Powerup is picked up user gets triple fire for a limited time
-		mSpaceship->ActivateTripleFire(2000);
-		mScoreKeeper.mScore = mScoreKeeper.mScore * 2;
-		
+		if (!mStartGame)
+		{
+			mDemoSpaceship->AiActivateTripleFire(2000);
+		}
+		else {
+			// When Powerup is picked up user gets triple fire for a limited time
+			mSpaceship->ActivateTripleFire(2000);
+			mScoreKeeper.mScore = mScoreKeeper.mScore * 2;
 
-		std::ostringstream msg_stream;
-		msg_stream << "Score: " << mScoreKeeper.mScore;
-		// Get the score message as a string
-		std::string score_msg = msg_stream.str();
-		mScoreLabel->SetText(score_msg);
 
-		SetTimer(300, CREATE_SCORE_MULTIPLIER);
+			std::ostringstream msg_stream;
+			msg_stream << "Score: " << mScoreKeeper.mScore;
+			// Get the score message as a string
+			std::string score_msg = msg_stream.str();
+			mScoreLabel->SetText(score_msg);
 
+			SetTimer(300, CREATE_SCORE_MULTIPLIER);
+		}
+	}
+	if (object->GetType() == GameObjectType("DemoSpaceship"))
+	{
+		if (!mStartGame)
+		{
+			shared_ptr<GameObject> explosion = CreateExplosion();
+				explosion->SetPosition(mDemoSpaceship->GetPosition());
+				explosion->SetRotation(mDemoSpaceship->GetRotation());
+				mGameWorld->AddObject(CreateDemoSpaceship());
+
+		}
 	}
 }
 
@@ -243,6 +267,9 @@ void Asteroids::OnTimer(int value)
 		mLevel++;
 		int num_asteroids = 10 + 2 * mLevel;
 		CreateAsteroids(num_asteroids);
+		CreatePowerUp(1);
+		CreateScoreMultiplier(1);
+
 	}
 
 	if (value == SHOW_GAME_OVER)
@@ -256,6 +283,16 @@ void Asteroids::OnTimer(int value)
 	if (value == CREATE_SCORE_MULTIPLIER)
 	{
 		CreateScoreMultiplier(1);
+	}
+	if (value == DEMO_CONTROL)
+	{
+		if (!mStartGame)
+		{
+			mDemoSpaceship->Thrust(rand() % 20 + (2));
+			mDemoSpaceship->Rotate(rand() % 130 + (-90));
+			mDemoSpaceship->Shoot();
+			SetTimer(700, DEMO_CONTROL);
+		}
 	}
 }
 
@@ -280,10 +317,24 @@ shared_ptr<GameObject> Asteroids::CreateSpaceship()
 
 }
 
-//shared_ptr<GameObject> Asteroids::CreateDemoSpaceship()
-//{
-
-//}
+shared_ptr<GameObject> Asteroids::CreateDemoSpaceship()
+{
+	//Create a raw pointer to a spaceship that can be converted to
+	// shared_ptrs of different types because GameWorld implements IRefCount
+	mDemoSpaceship = make_shared<DemoSpaceship>();
+	mDemoSpaceship->SetBoundingShape(make_shared<BoundingSphere>(mDemoSpaceship->GetThisPtr(), 4.0f));
+	shared_ptr<Shape> demoBullet_shape = make_shared<Shape>("bullet.shape");
+	mDemoSpaceship->SetDemoBulletShape(demoBullet_shape);
+	Animation* anim_ptr = AnimationManager::GetInstance().GetAnimationByName("spaceship");
+	shared_ptr<Sprite> spaceship_sprite =
+		make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+	mDemoSpaceship->SetSprite(spaceship_sprite);
+	mDemoSpaceship->SetScale(0.1f);
+	// Reset spaceship back to centre of the world
+	mDemoSpaceship->Reset();
+	// Return the spaceship so it can be added to the world
+	return mDemoSpaceship;
+}
 
 void Asteroids::CreateAsteroids(const uint num_asteroids)
 {
@@ -334,6 +385,8 @@ void Asteroids::CreateGUI()
 	mLivesLabel = make_shared<GUILabel>("Lives: 3");
 	// Set the vertical alignment of the label to GUI_VALIGN_BOTTOM
 	mLivesLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_BOTTOM);
+	// Set visability to hidden
+	mLivesLabel->SetVisible(false);
 	// Add the GUILabel to the GUIComponent  
 	shared_ptr<GUIComponent> lives_component = static_pointer_cast<GUIComponent>(mLivesLabel);
 	mGameDisplay->GetContainer()->AddComponent(lives_component, GLVector2f(0.0f, 0.0f));

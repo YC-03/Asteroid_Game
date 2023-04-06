@@ -50,9 +50,10 @@ public:
 	// Override the default implementation of ITimerListener ////////////////////
 	void OnTimer(int value);
 
-
+	;
 private:
 	shared_ptr<Spaceship> mSpaceship;
+	shared_ptr<DemoSpaceship> mDemoSpaceship;
 	shared_ptr<GUILabel> mScoreLabel;
 	shared_ptr<GUILabel> mLivesLabel;
 	shared_ptr<GUILabel> mGameOverLabel;
@@ -61,8 +62,8 @@ private:
 	// Power Up 
 	shared_ptr<PowerUp>mPowerUp;
 	shared_ptr<ScoreMultiplier>mScoreMultiplier;
-	// Demo Spaceship
-	shared_ptr<DemoSpaceship>mDemoSpaceship;
+
+
 	uint mLevel;
 	uint mAsteroidCount;
 
@@ -72,6 +73,7 @@ private:
 	shared_ptr<GameObject> CreateSpaceship();
 	// Creates demo spaceship
 	shared_ptr<GameObject> CreateDemoSpaceship();
+
 	void CreateGUI();
 	void CreateAsteroids(const uint num_asteroids);
 	// Adds extra life
@@ -85,7 +87,7 @@ private:
 	const static uint CREATE_NEW_PLAYER = 2;
 	const static uint CREATE_POWER_UP = 3;
 	const static uint CREATE_SCORE_MULTIPLIER = 4;
-	//const static unit DEMO_CONTROL = 5;
+	const static uint DEMO_CONTROL = 5;
 
 	//boolean to start game
 	bool mStartGame;

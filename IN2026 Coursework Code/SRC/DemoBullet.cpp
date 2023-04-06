@@ -6,7 +6,7 @@
 
 /** Constructor. Bullets live for 2s by default. */
 DemoBullet::DemoBullet()
-	: GameObject("Bullet"), mTimeToLive(2000)
+	: GameObject("DemoBullet"), mTimeToLive(2000)
 {
 }
 

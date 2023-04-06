@@ -35,7 +35,7 @@ void PowerUp::Render(void)
 
 bool PowerUp::CollisionTest(shared_ptr<GameObject>o)
 {
-	if (o->GetType() == GameObjectType("Asteroid") || o->GetType() == GameObjectType("Bullet") || o->GetType() == GameObjectType("ScoreMultiplier"))
+	if (o->GetType() == GameObjectType("Asteroid") || o->GetType() == GameObjectType("Bullet") || o->GetType() == GameObjectType("DemoBullet") || o->GetType() == GameObjectType("ScoreMultiplier"))
 		return false;
 	if (mBoundingShape.get() == NULL)
 		return false;

@@ -32,7 +32,7 @@ void ScoreMultiplier::Render(void)
 
 bool ScoreMultiplier::CollisionTest(shared_ptr<GameObject>o)
 {
-	if (o->GetType() == GameObjectType("Asteroid") || o->GetType() == GameObjectType("Bullet") || o->GetType() == GameObjectType("PowerUp"))
+	if (o->GetType() == GameObjectType("Asteroid") || o->GetType() == GameObjectType("Bullet") || o->GetType() == GameObjectType("DemoBullet") || o->GetType() == GameObjectType("PowerUp"))
 		return false;
 	if (mBoundingShape.get() == NULL)
 		return false;
